@@ -1,122 +1,154 @@
+/* 배경 이미지 설정 */
 body {
-    font-family: sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .app {
-    padding: 2rem;
-  }
-  
-  .scoreboard {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .score-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5rem;
-  }
-  
-  .score-table th,
-  .score-table td {
-    border: 1px solid #ccc;
-    padding: 0.75rem;
-  }
-  
-  .score-table th {
-    background-color: #ffeb3b;
-  }
-  
-  .not-scored {
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  .scored {
-    background-color: #ff80ab;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .info-box {
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: left;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .modal {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 300px;
-    text-align: center;
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .modal-body {
-    margin: 1.5rem 0;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-  
-  .modal-close {
-    background-color: #007bff;
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 1rem;
-  }
-  
-  .btn {
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .btn.confirm {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .btn.cancel {
-    background-color: #f44336;
-    color: white;
-  }
-  
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background: url('./assets/게임배경.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* 앱 전체를 화면 중앙에 */
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;     
+  width: 100vw;      
+  overflow: hidden;
+}
+
+/* 점수판 */
+.scoreboard {
+  text-align: center;
+  max-width: 900px;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.9); /* 반투명 흰 배경 */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 전체 배경 + 중앙 정렬 (원래 .app에 있던 것 → .scoreboard-full로 이동) */
+.scoreboard-full {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* 점수판 박스 */
+.scoreboard-box {
+  text-align: center;
+  max-width: 1000px;
+  width: 95%;
+  background-color: rgba(255, 255, 255, 0.9); /* 반투명 흰 배경 */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+/* 표 스타일 */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.score-table th,
+.score-table td {
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+}
+
+.score-table th {
+  background-color: #ffeb3b;
+}
+
+.not-scored {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.scored {
+  background-color: #ff80ab;
+  color: white;
+  cursor: pointer;
+}
+
+/* 모달 */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  margin: 1.5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.modal-close {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn.confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn.cancel {
+  background-color: #f44336;
+  color: white;
+}

@@ -1,131 +1,97 @@
+// ✅ ScoreBoard.jsx - 2개씩 칸 구성으로 업데이트
 import React, { useState } from 'react';
 import challenges from '../data/challenges';
+import '../style.css';
 
 const ScoreBoard = () => {
   const pointValues = [10, 20, 30, 40, 50];
 
+  // 각 점수마다 2개의 문제로 구성
   const [players, setPlayers] = useState([
-    { name: '동요', scores: [false, false, false, false, false] },
-    { name: '클래식', scores: [false, false, false, false, false] },
-    { name: '1999년 노래', scores: [false, false, false, false, false] },
-    { name: '2000년대 노래', scores: [false, false, false, false, false] },
-    { name: '음악', scores: [false, false, false, false, false] }
+    { name: '조 퀴즈', scores: Array(10).fill(false) },
+    { name: 'KPOP 가사 퀴즈', scores: Array(10).fill(false) },
+    { name: '팝송 가사 퀴즈', scores: Array(10).fill(false) },
+    { name: '노래 듣고 맞추기 퀴즈', scores: Array(10).fill(false) },
+    { name: '외국 영화 명대사 퀴즈', scores: Array(10).fill(false) },
+    { name: '한국 영화 명대사 퀴즈', scores: Array(10).fill(false) },
+    { name: '가위바위보', scores: Array(10).fill(false) },
+    { name: '인물 퀴즈', scores: Array(10).fill(false) },
+    { name: '한국 상식 퀴즈', scores: Array(10).fill(false) },
+    { name: '세계 문화 퀴즈', scores: Array(10).fill(false) },
+    { name: '수도 퀴즈', scores: Array(10).fill(false) },
+    { name: '국기 퀴즈', scores: Array(10).fill(false) },
   ]);
 
-  // 미션 모달 상태
-  const [modal, setModal] = useState({
-    isOpen: false,
-    challenge: '',
-    player: '',
-    points: 0
-  });
+  const [modal, setModal] = useState({ isOpen: false, challenge: '', player: '', points: 0 });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
 
-  // 확인 모달 상태
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    playerIndex: null,
-    scoreIndex: null,
-    challengeText: ''
-  });
-
-  // 칸 클릭 → 확인 모달 띄우기
   const openConfirmModal = (playerIndex, scoreIndex) => {
-    if (players[playerIndex].scores[scoreIndex]) return; // 이미 완료된 미션이면 아무 일도 없음
-  
-    const playerName = players[playerIndex].name;
-    const points = pointValues[scoreIndex];
-    const challengeText = challenges[playerName][points];
-  
-    setConfirmModal({
-      isOpen: true,
-      playerIndex,
-      scoreIndex,
-      challengeText
-    });
-  };
-  
+    if (players[playerIndex].scores[scoreIndex]) return;
 
-  // 확인 모달 "네" → 점수 반영 및 미션 모달 열기
+    const playerName = players[playerIndex].name;
+    const points = pointValues[Math.floor(scoreIndex / 2)];
+    const challengeText = challenges[playerName][points];
+
+    setConfirmModal({ isOpen: true, playerIndex, scoreIndex, challengeText });
+  };
+
   const confirmSelection = () => {
     const { playerIndex, scoreIndex } = confirmModal;
     const newPlayers = [...players];
-    newPlayers[playerIndex].scores[scoreIndex] = !newPlayers[playerIndex].scores[scoreIndex];
+    newPlayers[playerIndex].scores[scoreIndex] = true;
     setPlayers(newPlayers);
 
     const playerName = players[playerIndex].name;
-    const points = pointValues[scoreIndex];
+    const points = pointValues[Math.floor(scoreIndex / 2)];
 
-    setModal({
-      isOpen: true,
-      challenge: challenges[playerName][points],
-      player: playerName,
-      points
-    });
+    setModal({ isOpen: true, challenge: challenges[playerName][points], player: playerName, points });
 
-    // 확인 모달 닫기
-    setConfirmModal({
-      isOpen: false,
-      playerIndex: null,
-      scoreIndex: null,
-      challengeText: ''
-    });
+    setConfirmModal({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
   };
 
-  // 확인 모달 "아니요"
   const cancelSelection = () => {
-    setConfirmModal({
-      isOpen: false,
-      playerIndex: null,
-      scoreIndex: null,
-      challengeText: ''
-    });
+    setConfirmModal({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
   };
 
-  // 미션 모달 닫기
   const closeModal = () => {
     setModal({ ...modal, isOpen: false });
   };
 
   return (
-    <div className="scoreboard">
-      <h1 className="title">신서유기 점수판</h1>
-
-      <table className="score-table">
-        <thead>
-          <tr>
-            <th></th>
-            {pointValues.map((points, index) => (
-              <th key={index}>{points}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {players.map((player, playerIndex) => (
-            <tr key={playerIndex}>
-              <td>{player.name}</td>
-              {player.scores.map((isScored, scoreIndex) => (
-                <td
-                  key={scoreIndex}
-                  className={isScored ? 'scored' : 'not-scored'}
-                  onClick={() => openConfirmModal(playerIndex, scoreIndex)}
-                >
-                  {isScored ? '✓' : ''}
-                </td>
+    <div className="scoreboard-full">
+      <div className="scoreboard-box">
+        <h1 className="title">신서유기 점수판</h1>
+        <table className="score-table">
+          <thead>
+            <tr>
+              <th></th>
+              {pointValues.map((points, i) => (
+                <React.Fragment key={i}>
+                  <th>{points}점</th>
+                  <th></th>
+                </React.Fragment>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="info-box">
-        <h2>게임 안내</h2>
-        <ul>
-          <li>칸을 클릭하면 제시어가 나오고, 확인 후 점수를 기록할 수 있어요.</li>
-          <li>완료한 칸은 분홍색으로 표시됩니다.</li>
-        </ul>
+          </thead>
+          <tbody>
+            {players.map((player, playerIndex) => (
+              <tr key={playerIndex}>
+                <td>{player.name}</td>
+                {player.scores.map((isScored, scoreIndex) => (
+                  <td
+                    key={scoreIndex}
+                    className={isScored ? 'scored' : 'not-scored'}
+                    onClick={() => openConfirmModal(playerIndex, scoreIndex)}
+                  >
+                    {isScored ? '✓' : `Q${(scoreIndex % 2) + 1}`}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-      {/* 미션 모달 */}
       {modal.isOpen && (
         <div className="modal-backdrop">
           <div className="modal">
@@ -141,21 +107,19 @@ const ScoreBoard = () => {
         </div>
       )}
 
-      {/* 확인 모달 */}
       {confirmModal.isOpen && (
-  <div className="modal-backdrop">
-    <div className="modal">
-      <div className="modal-header">
-        <h3>정말 하시겠습니까?</h3>
-      </div>
-      <div className="modal-actions">
-        <button className="btn confirm" onClick={confirmSelection}>예</button>
-        <button className="btn cancel" onClick={cancelSelection}>아니요</button>
-      </div>
-    </div>
-  </div>
-)}
-
+        <div className="modal-backdrop">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>정말 하시겠습니까?</h3>
+            </div>
+            <div className="modal-actions">
+              <button className="btn confirm" onClick={confirmSelection}>예</button>
+              <button className="btn cancel" onClick={cancelSelection}>아니요</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
