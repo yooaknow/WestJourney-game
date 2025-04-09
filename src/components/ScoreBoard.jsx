@@ -1,4 +1,4 @@
-// ✅ ScoreBoard.jsx - 2개씩 칸 구성으로 업데이트
+// ✅ ScoreBoard.jsx - 문제 1개씩 구성으로 업데이트
 import React, { useState } from 'react';
 import challenges from '../data/challenges';
 import '../style.css';
@@ -6,20 +6,19 @@ import '../style.css';
 const ScoreBoard = () => {
   const pointValues = [10, 20, 30, 40, 50];
 
-  // 각 점수마다 2개의 문제로 구성
   const [players, setPlayers] = useState([
-    { name: '조 퀴즈', scores: Array(10).fill(false) },
-    { name: 'KPOP 가사 퀴즈', scores: Array(10).fill(false) },
-    { name: '팝송 가사 퀴즈', scores: Array(10).fill(false) },
-    { name: '노래 듣고 맞추기 퀴즈', scores: Array(10).fill(false) },
-    { name: '외국 영화 명대사 퀴즈', scores: Array(10).fill(false) },
-    { name: '한국 영화 명대사 퀴즈', scores: Array(10).fill(false) },
-    { name: '가위바위보', scores: Array(10).fill(false) },
-    { name: '인물 퀴즈', scores: Array(10).fill(false) },
-    { name: '한국 상식 퀴즈', scores: Array(10).fill(false) },
-    { name: '세계 문화 퀴즈', scores: Array(10).fill(false) },
-    { name: '수도 퀴즈', scores: Array(10).fill(false) },
-    { name: '국기 퀴즈', scores: Array(10).fill(false) },
+    { name: '조 퀴즈', scores: Array(5).fill(false) },
+    { name: 'KPOP 가사 퀴즈', scores: Array(5).fill(false) },
+    { name: '팝송 가사 퀴즈', scores: Array(5).fill(false) },
+    { name: '노래 듣고 맞추기 퀴즈', scores: Array(5).fill(false) },
+    { name: '외국 영화 명대사 퀴즈', scores: Array(5).fill(false) },
+    { name: '한국 영화 명대사 퀴즈', scores: Array(5).fill(false) },
+    { name: '가위바위보', scores: Array(5).fill(false) },
+    { name: '인물 퀴즈', scores: Array(5).fill(false) },
+    { name: '한국 상식 퀴즈', scores: Array(5).fill(false) },
+    { name: '세계 문화 퀴즈', scores: Array(5).fill(false) },
+    { name: '수도 퀴즈', scores: Array(5).fill(false) },
+    { name: '국기 퀴즈', scores: Array(5).fill(false) },
   ]);
 
   const [modal, setModal] = useState({ isOpen: false, challenge: '', player: '', points: 0 });
@@ -27,11 +26,9 @@ const ScoreBoard = () => {
 
   const openConfirmModal = (playerIndex, scoreIndex) => {
     if (players[playerIndex].scores[scoreIndex]) return;
-
     const playerName = players[playerIndex].name;
-    const points = pointValues[Math.floor(scoreIndex / 2)];
+    const points = pointValues[scoreIndex];
     const challengeText = challenges[playerName][points];
-
     setConfirmModal({ isOpen: true, playerIndex, scoreIndex, challengeText });
   };
 
@@ -42,20 +39,13 @@ const ScoreBoard = () => {
     setPlayers(newPlayers);
 
     const playerName = players[playerIndex].name;
-    const points = pointValues[Math.floor(scoreIndex / 2)];
-
+    const points = pointValues[scoreIndex];
     setModal({ isOpen: true, challenge: challenges[playerName][points], player: playerName, points });
-
     setConfirmModal({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
   };
 
-  const cancelSelection = () => {
-    setConfirmModal({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
-  };
-
-  const closeModal = () => {
-    setModal({ ...modal, isOpen: false });
-  };
+  const cancelSelection = () => setConfirmModal({ isOpen: false, playerIndex: null, scoreIndex: null, challengeText: '' });
+  const closeModal = () => setModal({ ...modal, isOpen: false });
 
   return (
     <div className="scoreboard-full">
@@ -66,10 +56,7 @@ const ScoreBoard = () => {
             <tr>
               <th></th>
               {pointValues.map((points, i) => (
-                <React.Fragment key={i}>
-                  <th>{points}점</th>
-                  <th></th>
-                </React.Fragment>
+                <th key={i}>{points}점</th>
               ))}
             </tr>
           </thead>
@@ -83,7 +70,7 @@ const ScoreBoard = () => {
                     className={isScored ? 'scored' : 'not-scored'}
                     onClick={() => openConfirmModal(playerIndex, scoreIndex)}
                   >
-                    {isScored ? '✓' : `Q${(scoreIndex % 2) + 1}`}
+                    {isScored ? '✓' : 'Q'}
                   </td>
                 ))}
               </tr>
